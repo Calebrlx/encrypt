@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Decrypt & Display Image - Dark Mode</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <style>
+        body {
+            background-color: #121212;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h2 {
+            color: #ff4081;
+        }
+        button, input, textarea {
+            background-color: #333;
+            color: white;
+            border: 1px solid #555;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 80%;
+        }
+        button {
+            background-color: #ff4081;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #f50057;
+        }
+        img {
+            max-width: 80%;
+            margin-top: 20px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Decrypt & Display</h2>
+    <input type="text" id="encryptionKey" placeholder="Encryption Key">
+    <textarea id="encryptedImage" placeholder="Encrypted Image Data" rows="5"></textarea>
+    <button onclick="decryptAndDisplay()">Decrypt Image</button>
+    <img id="decryptedImage" src="" alt="Decrypted Image Will Appear Here" style="display:none;">
+
+    <script>
+        function decryptAndDisplay() {
+            var encryptionKey = document.getElementById('encryptionKey').value;
+            var encryptedData = document.getElementById('encryptedImage').value;
+
+            if (!encryptionKey || !encryptedData) {
+                alert("Please provide both an encryption key and encrypted data.");
+                return;
+            }
+
+            // Decrypt the data
+            var decryptedData = CryptoJS.AES.decrypt(encryptedData, encryptionKey);
+            var decryptedImage = decryptedData.toString(CryptoJS.enc.Utf8);
+
+            // Display the decrypted image
+            if (decryptedImage) {
+                document.getElementById('decryptedImage').src = decryptedImage;
+                document.getElementById('decryptedImage').style.display = 'block';
+            } else {
+                alert("Decryption failed. Please check the encryption key and encrypted data.");
+            }
+        }
+    </script>
+</body>
+</html>

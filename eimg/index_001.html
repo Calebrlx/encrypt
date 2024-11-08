@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Camera to Encrypted</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+    <style>
+        html {
+            background-color: #ff69b4;
+            height: 100%;
+            overflow: hidden;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #121212;
+        }
+        .content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #e0e0e0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        h2 {
+            color: #ff4081;
+        }
+
+        button {
+            background-color: #ff4081;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #f50057;
+        }
+
+        p {
+            margin: 10px 0;
+        }
+
+        input[type="file"] {
+            margin-top: 20px;
+        }
+
+        #encryptedImage {
+            word-wrap: break-word;
+            max-width: 80%;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="content">
+        <h2>Capture & Encrypt</h2>
+        <input type="file" accept="image/*" id="capture" capture="camera">
+        <button onclick="convertAndEncrypt()">Encrypt Image</button>
+        <p><strong>Encryption Key:</strong> <span id="encryptionKey"></span></p>
+        <p><strong>Encrypted Image:</strong></p>
+        <p id="encryptedImage"></p>
+        <div>
+
+            <script>
+                function convertAndEncrypt() {
+                    var fileInput = document.getElementById('capture').files[0];
+                    var reader = new FileReader();
+
+                    reader.onloadend = function () {
+                        var base64Image = reader.result;
+                        var encryptionKey = CryptoJS.lib.WordArray.random(128 / 8).toString(CryptoJS.enc.Hex);
+                        var encrypted = CryptoJS.AES.encrypt(base64Image, encryptionKey);
+
+                        document.getElementById('encryptionKey').textContent = encryptionKey;
+                        document.getElementById('encryptedImage').textContent = encrypted.toString();
+                    }
+
+                    if (fileInput) {
+                        reader.readAsDataURL(fileInput);
+                    } else {
+                        alert("Please select an image first.");
+                    }
+                }
+            </script>
+</body>
+
+</html>
